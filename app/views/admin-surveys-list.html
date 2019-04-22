@@ -1,0 +1,54 @@
+<md-whiteframe class="md-whiteframe-z1" layout="row" layout-padding layout-wrap>
+    <div flex="100" layout="row" layout-align="start center" layout-padding>
+        <md-input-container flex>
+            <label for="list-search">Search by Slug</label>
+            <input id="list-search" type="text" ng-model="searchTerm" qv-enter="items = items.$orderByChild('slug').$startAt(searchTerm).$get(); orderBy = 'slug'" auto-enter="searchTerm" ng-focus="searchTerm = undefined;">
+        </md-input-container>
+        <span flex></span>
+        <md-button class="md-icon-button" flex ng-click="items = items.$prev(); orderBy = '-$priority'; searchTerm = undefined;" ng-disabled="items.$prevDisabled" aria-label="list back">
+            <i class="mdi-navigation-arrow-back"></i>
+        </md-button>
+        <md-button class="md-icon-button" flex ng-click="items = items.$next(); orderBy = '-$priority'; searchTerm = undefined;" ng-disabled="items.$nextDisabled" aria-label="list forward">
+            <i class="mdi-navigation-arrow-forward"></i>
+        </md-button>
+        <md-button class="md-icon-button" flex ng-click="items = items.$more(); orderBy = '-$priority'; searchTerm = undefined;" ng-disabled="items.$moreDisabled" aria-label="list load more">
+            <i class="mdi-navigation-expand-more"></i>
+        </md-button>
+        <md-button class="md-icon-button" flex ng-click="items = items.$reset(); orderBy = '-$priority'; searchTerm = undefined;" ng-disabled="items.$resetDisabled" aria-label="list reload">
+            <i class="mdi-navigation-refresh"></i>
+        </md-button>
+    </div>
+    <md-content flex="100">
+        <md-list layout="column" ng-if="!items">
+            <md-item>
+                <md-item-content class="text-center" layout="row" layout-align="center center" layout-padding layout-wrap>
+                    <h3 class="Headline">There are no surveys to display.</h3>
+                </md-item-content>
+            </md-item>
+        </md-list>
+        <section>
+            <md-list layout="column">
+                <md-item ng-repeat="survey in items | orderBy:'-$priority'" ng-class="{disabled: disabled}">
+                    <md-item-content class="extra-padding" layout="row" layout-sm="column" layout-align="space-between center" layout-padding layout-wrap style="padding-top: 2rem;">
+                        <md-button class="md-primary md-raised md-icon-button" flex ng-click="prioritizeSurvey(survey)" ng-class="{invisible: !$index}" style="transform: rotate(-90deg);" aria-label="Prioritize survey {{ survey.name }}">
+                            <i class="mdi-navigation-arrow-forward"></i>
+                        </md-button>
+                        <div class="max-10" flex>
+                            <md-checkbox ng-model="survey.active" ng-change="setActive(survey, survey.active)">
+                                Active
+                            </md-checkbox>
+                        </div>
+                        <a class="max-16" flex ui-sref="authenticated.master.admin.survey({key: survey.$id})">{{ ::survey.name }} <br> ({{ ::survey.slug }})</a>
+                        <span flex>{{ ::survey.question }}</span>
+                        <span class="max-10" flex>Answers: {{ ::survey.answered || 0 }} / {{ ::survey.asked || 0 }}</span>
+                        <span class="max-7" flex>{{ ::survey.created | moment:"MM/DD/YY" }}</span>
+                        <md-button class="md-warn md-icon-button" flex ng-click="disabled = true; confirmRemoveSurvey($event, survey, items);" ng-disabled="disabled" aria-label="Delete survey {{ survey.name }}">
+                            <i class="mdi-action-delete"></i>
+                        </md-button>
+                    </md-item-content>
+                    <md-divider ng-if="!$last"></md-divider>
+                </md-item>
+            </md-list>
+        </section>
+    </md-content>
+</md-whiteframe>

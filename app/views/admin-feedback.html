@@ -1,0 +1,81 @@
+<section>
+    <div layout="row" layout-sm="column" layout-align="space-between">
+        <h3 class="headline">{{ assignment.title }} by <a ui-sref="authenticated.master.admin.messages.list({search: client.email})">{{ client.email }}</a></h3>
+    </div>
+    <md-whiteframe class="md-whiteframe-z1" layout="row" layout-align="start end" layout-padding layout-wrap ng-if="uploads.length">
+        <md-button class="margin-zero-important" flex="33" flex-sm="100" ng-click="openGallery($event, image, uploads)" ng-repeat="(key, image) in uploads" style="height: inherit;" aria-label="Open image in gallery {{ image.name }}">
+            <img ng-class="{'disabled': image.disabled}" ng-src="{{ image.url }}" alt="{{ image.Name }}" title="{{ image.Name }} ({{ image.Size / 1000 | number:0 }}kb)">
+        </md-button>
+    </md-whiteframe>
+</section>
+<section>
+    <md-whiteframe class="md-whiteframe-z1" layout="row" layout-padding layout-wrap>
+        <h3 class="headline" flex="100">Messages</h3>
+        <md-list flex>
+            <md-item ng-repeat="message in messages">
+                <md-item-content layout="row" layout-align="space-between center" layout-padding layout-wrap>
+                    <strong class="max-20" flex>{{ message.userName }}</strong>
+                    <div class="markdown relative" flex markdown-editable ng-model="message.text" style="top: 8px;"></div>
+                    <div class="text-right max-12" flex ng-if="message.queued">
+                        <i class="mdi-communication-email" ng-class="{'text-success': message.alerted}"></i>
+                        <span>&nbsp; {{ message.alerted || message.queued | moment:"MM/DD/YYYY" }}</span>
+                    </div>
+                </md-item-content>
+                <md-divider ng-if="!$last"></md-divider>
+            </md-item>
+        </md-list>
+        <md-whiteframe class="md-whiteframe-z0 background-secondary4" flex="100" layout="row" layout-align="start center" layout-padding layout-wrap>
+            <md-input-container flex>
+                <label for="new-message">New Message</label>
+                <textarea id="new-message" ng-model="text" placeholder="Message..."></textarea>
+            </md-input-container>
+            <md-button class="md-primary md-raised max-10 adjust-line-height" flex ng-click="sendMessage(text); text = undefined;" qv-focus="#new-message" ng-disabled="!text || !text.length">
+                Send
+            </md-button>
+        </md-whiteframe>
+    </md-whiteframe>
+</section>
+<section>
+    <md-whiteframe class="md-whiteframe-z1" layout="row" layout-padding layout-wrap>
+        <h3 class="headline" flex="100">Instructor's Eyes Only</h3>
+        <md-button class="md-primary md-raised max-20 adjust-line-height" flex ng-href="/user/{{ client.$id }}/assignment/{{ userAssignment.$id }}/feedback-email/html" target="_blank">
+            Preview HTML Email
+        </md-button>
+        <md-button class="md-primary md-raised max-20 adjust-line-height" flex ng-href="/user/{{ client.$id }}/assignment/{{ userAssignment.$id }}/feedback-email/text" target="_blank">
+            Preview Text Email
+        </md-button>
+        <md-button class="md-primary md-raised max-20 adjust-line-height" flex ng-click="queueFeedbackEmail(client.$id, userAssignment.$id); disableEmail = true;" ng-disabled="disableEmail">
+            Email Assignment Update
+        </md-button>
+        <span class="padding-zero-important" flex="100"></span>
+        <md-input-container flex="50" flex-sm="100">
+            <label for="client-comments">Client Comments</label>
+            <textarea id="client-comments" style="min-height: 10rem;" ng-model="client.comment" ng-model-options="{debounce: {'default': 1000}}"></textarea>
+        </md-input-container>
+        <md-input-container flex="50" flex-sm="100">
+            <label for="assignment-comments">Assignment Comments</label>
+            <textarea id="assignment-comments" style="min-height: 10rem;" ng-model="userAssignment.comment" ng-model-options="{debounce: {'default': 1000}}"></textarea>
+        </md-input-container>
+    </md-whiteframe>
+</section>
+<section>
+    <div class="text-right">
+        <md-button class="md-accent md-raised md-fab" ng-click="viewAllUserFiles(client.$id)" ng-if="!userFiles.length">
+            <i class="mdi-content-add-circle text-x-large"></i>
+            <md-tooltip>View All User Images</md-tooltip>
+        </md-button>
+    </div>
+    <md-whiteframe class="md-whiteframe-z1" layout="column" layout-padding layout-wrap ng-if="userFiles.length">
+        <div flex>
+            <h3 class="headline">All User Images</h3>
+        </div>
+        <md-list flex>
+            <md-item ng-repeat="file in userFiles">
+                <md-item-content layout="row" layout-align="center center" layout-padding layout-wrap>
+                    <img ng-src="{{ file.url }}">
+                </md-item-content>
+                <md-divider ng-if="!$last"></md-divider>
+            </md-item>
+        </md-list>
+    </md-whiteframe>
+</section>

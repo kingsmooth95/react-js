@@ -1,0 +1,52 @@
+<md-whiteframe class="md-whiteframe-z1" layout="column" layout-fill>
+    <div layout="row" layout-align="start center" layout-align-sm="center center" layout-padding layout-wrap>
+        <md-input-container flex flex-sm="100">
+            <label for="list-search">Search by Email</label>
+            <input id="list-search" type="text" ng-model="searchTerm" qv-enter="items = items.$orderByChild('email').$startAt(searchTerm).$limit(20).$get(); orderBy = 'email'" ng-focus="searchTerm = undefined;" auto-enter="searchTerm">
+        </md-input-container>
+        <span flex hide-sm></span>
+        <md-button class="md-icon-button" flex ng-click="items = items.$prev(); orderBy = '-$id'; query = undefined;" ng-disabled="items.$prevDisabled" aria-label="list back">
+            <i class="mdi-navigation-arrow-back"></i>
+        </md-button>
+        <md-button class="md-icon-button" flex ng-click="items = items.$next(); orderBy = '-$id'; query = undefined;" ng-disabled="items.$nextDisabled" aria-label="list forward">
+            <i class="mdi-navigation-arrow-forward"></i>
+        </md-button>
+        <md-button class="md-icon-button" flex ng-click="items = items.$more(); orderBy = '-$id'; query = undefined;" ng-disabled="items.$moreDisabled" aria-label="list load more">
+            <i class="mdi-navigation-expand-more"></i>
+        </md-button>
+        <md-button class="md-icon-button" flex ng-click="items = items.$reset(); orderBy = '-$id'; query = undefined;" ng-disabled="items.$resetDisabled" aria-label="list reload">
+            <i class="mdi-navigation-refresh"></i>
+        </md-button>
+    </div>
+    <md-content>
+        <md-list layout="column" ng-if="!items">
+            <md-item>
+                <md-item-content class="text-center" layout="row" layout-align="center center" layout-padding layout-wrap>
+                    <h3 class="Headline">There are no subscriptions to display.</h3>
+                </md-item-content>
+            </md-item>
+        </md-list>
+        <section>
+            <md-list layout="column">
+                <md-item ng-repeat="subscription in items | orderBy:'-date'">
+                    <md-item-content class="extra-padding" layout="row" layout-sm="column" layout-align="space-between center" layout-padding layout-wrap style="padding-top: 2rem;">
+                        <md-button class="md-primary md-raised md-icon-button" ui-sref="authenticated.master.admin.subscription({key: subscription.$id})" aria-label="Go to subscription by {{ subscription.email }}">
+                            <i class="mdi-content-forward"></i>
+                        </md-button>
+                        <a class="truncate" flex ng-href="mailto:{{ ::subscription.user.email }}">{{ ::subscription.user.email }}</a>
+                        <div flex>
+                            {{ ::subscription.title }}
+                        </div>
+                        <div flex>
+                            {{ ::subscription.subscriptionDays }} Days
+                        </div>
+                        <div flex>
+                            {{ ::subscription.date | moment:"MM/DD/YY hh:mm:ss" }}
+                        </div>
+                    </md-item-content>
+                    <md-divider ng-if="!$last"></md-divider>
+                </md-item>
+            </md-list>
+        </section>
+    </md-content>
+</md-whiteframe>
