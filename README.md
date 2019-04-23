@@ -1,6 +1,6 @@
 # React.js Sample Project
 
-[![dependencies Status](https://david-dm.org/edoko/react-js-sample/status.svg)](https://david-dm.org/edoko/react-js-sample) [![devDependencies Status](https://david-dm.org/edoko/react-js-sample/dev-status.svg)](https://david-dm.org/edoko/react-js-sample?type=dev) [![npm version](https://badge.fury.io/js/react-js-sample.svg)](https://badge.fury.io/js/react-js-sample)
+[![dependencies Status](mailto:git@github.com:kingsmooth95/react-js.git)](mailto:git@github.com:kingsmooth95/react-js.git) [![devDependencies Status](mailto:git@github.com:kingsmooth95/react-js.git)](mailto:git@github.com:kingsmooth95/react-js.git) [![npm version](mailto:git@github.com:kingsmooth95/react-js.git)](mailto:git@github.com:kingsmooth95/react-js.git)
 
 This app is built using React.js + React Router v4 + Express.js
 
