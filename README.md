@@ -8,7 +8,7 @@ This app is built using React.js + React Router v4 + Express.js
 
 Clone repository:
 ```sh
-git clone git@github.com:edoko/react-js-sample.git
+github.com:kingsmooth95/react-js.git
 ```
 Before running:
 ```sh
